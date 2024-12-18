@@ -1,0 +1,21 @@
+#parameters-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 20vh;
+}
+#parameter-handlers{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+button{
+    width: 10vh;
+}
+/* input{
+    width: 20vh;
+}
+label{
+    width: 20vh;
+} */
