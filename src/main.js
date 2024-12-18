@@ -5,7 +5,7 @@ import $ from 'jquery'
 let is_game_on = false;
 let cart;
 let sandParticles = [];
-let maxSandParticles = 150;
+let maxSandParticles = 1500;
 const stop_btn = $("#stop_btn");
 const start_btn = $("#start_btn");
 const restart_btn = $("#reload_btn");
@@ -60,7 +60,7 @@ function startGame(){
       default: 'arcade',
       arcade: {
         gravity: { y: 300 }, // Гравитация вниз
-        debug: true          // Отображение физических границ
+        debug: false          // Отображение физических границ
       }
     },
   };
@@ -81,7 +81,7 @@ function startGame(){
     //пол
     //жерново
     //300 -> 290 (3.5% от длины) - длина первого верхнего блока
-    this.add.rectangle(cart_length*0.965/2, 430, cart_length*0.965, 30, 0xA9A9A9)
+    this.add.rectangle(cart_length*0.965/2, 430, cart_length*0.965, 20, 0xA9A9A9)
     graphics.fillStyle(0xA9A9A9, 1); // серый цвет, полностью непрозрачный
 
     // Настраиваем стиль обводки (цвет и толщина линии)
@@ -105,13 +105,19 @@ function startGame(){
     //длина второго квадрата = 1500 - cart_length*1.05 + 2 + cart_length*0.0833
     //центр второго квадрата = cart_length*1.05 + 2 + cart_length*0.0833 + половина длины
     const second_cube_length = 1500 - cart_length*1.05 + 2 + cart_length*0.0833;
-    this.add.rectangle(cart_length*1.05 + 2 + cart_length*0.0833 + second_cube_length/2,430, second_cube_length,30,0xA9A9A9)
+    this.add.rectangle(cart_length*1.05 + 2 + cart_length*0.0833 + second_cube_length/2,430, second_cube_length,20,0xA9A9A9)
 
     // Заливаем треугольник цветом
     graphics.fillPath();
 
     //жерново
-    
+    graphics.fillStyle(0xffff00, 1);
+    graphics.beginPath();
+    graphics.moveTo(cart_length*0.96, 415);
+    graphics.lineTo(cart_length*1.06 + 2 + cart_length*0.0833, 415);
+    graphics.lineTo(cart_length*1.055, 446);
+    graphics.closePath();
+    graphics.fillPath();
 
     cart = this.add.rectangle(cart_length*0.5+5, startY, cart_length, 40, 0xff0000); // Красный квадрат
     this.physics.add.existing(cart); // Добавляем физическое тело
@@ -137,6 +143,7 @@ function startGame(){
       $("#game-container").html('');
       is_game_on = false;
       is_game_started = false;
+      sandParticles = [];
       $("#parameters-form > input").val("");
     })
     start_btn.click(() => {
