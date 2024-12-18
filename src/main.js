@@ -10,8 +10,8 @@ const stop_btn = $("#stop_btn");
 const start_btn = $("#start_btn");
 const restart_btn = $("#reload_btn");
 let cart_init_force = 50;
-let startX = 160;
 let startY = 530;
+let is_game_started = false;
 let ground;
 let cart_mass = 1;
 let cart_length;
@@ -35,13 +35,10 @@ function fillParameters(){
 }
 
 start_btn.click(() => {
-  if(!is_game_on){
+  if(!is_game_on && !is_game_started){
     if(fillParameters()){
       startGame();
-      // this.scene.resume();
-      // if(cart.body.velocity.x == 0){
-      //   cart.body.setVelocityX(cart_init_force/cart_mass)
-      // }
+      is_game_started = true;
       is_game_on = true;
     }
   }
@@ -75,7 +72,6 @@ function startGame(){
   }
 
   function create(){
-    
     //пол
     const graphics = this.add.graphics();
     graphics.fillStyle(0x4CAF50, 1); // Зеленый цвет, непрозрачный
@@ -85,7 +81,6 @@ function startGame(){
     //пол
     //жерново
     //300 -> 290 (3.5% от длины) - длина первого верхнего блока
-    //
     this.add.rectangle(cart_length*0.965/2, 430, cart_length*0.965, 30, 0xA9A9A9)
     graphics.fillStyle(0xA9A9A9, 1); // серый цвет, полностью непрозрачный
 
@@ -141,17 +136,13 @@ function startGame(){
       game.destroy(true);
       $("#game-container").html('');
       is_game_on = false;
+      is_game_started = false;
       $("#parameters-form > input").val("");
     })
     start_btn.click(() => {
-      if(!is_game_on){
-        if(fillParameters()){
+      if(!is_game_on && is_game_started){
           this.scene.resume();
-          if(cart.body.velocity.x == 0){
-            cart.body.setVelocityX(cart_init_force/cart_mass)
-          }
           is_game_on = true;
-        }
       }
     })
   }
@@ -171,8 +162,7 @@ function startGame(){
           particle.destroy(); // Удаляем песчинку
           sandParticles.splice(index, 1);
         }
-      }
-    )
+    });
   }
 
   function createSandParticle(scene) {
