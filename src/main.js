@@ -3,12 +3,12 @@ import $ from 'jquery'
 
 
 let is_game_on = false;
-let cart;
+let cart, wheel1, wheel2;
 let sandParticles = [];
 let maxSandParticles = 1500;
-const stop_btn = $("#stop_btn");
-const start_btn = $("#start_btn");
-const restart_btn = $("#reload_btn");
+let stop_btn = $("#stop_btn");
+let start_btn = $("#start_btn");
+let restart_btn = $("#reload_btn");
 let cart_init_force = 50;
 let startY = 530;
 let is_game_started = false;
@@ -34,7 +34,7 @@ function fillParameters(){
   return true;
 }
 
-start_btn.click(() => {
+start_btn[0].addEventListener('click',() => {
   if(!is_game_on && !is_game_started){
     if(fillParameters()){
       startGame();
@@ -42,7 +42,7 @@ start_btn.click(() => {
       is_game_on = true;
     }
   }
-})
+});
 
 function startGame(){
   var config = {
@@ -60,7 +60,7 @@ function startGame(){
       default: 'arcade',
       arcade: {
         gravity: { y: 300 }, // Гравитация вниз
-        debug: false          // Отображение физических границ
+        debug: true          // Отображение физических границ
       }
     },
   };
@@ -119,14 +119,23 @@ function startGame(){
     graphics.closePath();
     graphics.fillPath();
 
-    cart = this.add.rectangle(cart_length*0.5+5, startY, cart_length, 40, 0xff0000); // Красный квадрат
+    cart = this.add.rectangle(cart_length*0.5+5, startY-10, cart_length, 20, 0xff0000); // Красный квадрат
     this.physics.add.existing(cart); // Добавляем физическое тело
     cart.body.setCollideWorldBounds(true); // Не позволяет выйти за границы экрана
-    this.physics.add.collider(cart, ground);
     cart.body.setImmovable(false);
     cart.body.setFriction(0);
+    cart.body.setAllowGravity(false);
+    wheel1 = this.add.circle(cart_length*0.5+5 + cart_length*0.25, startY+5, 15*(cart_length/300), 0xff0000); // Левое колесо
+    wheel2 = this.add.circle(cart_length*0.5+5 - cart_length*0.25, startY+5, 15*(cart_length/300), 0xff0000); // Правое колесо
+    this.physics.add.existing(wheel1);
+    this.physics.add.existing(wheel2);
+    this.physics.add.collider(cart, ground);
+    this.physics.add.collider(wheel1, ground);
+    this.physics.add.collider(wheel2, ground);
 
     cart.body.setVelocityX(cart_init_force/cart_mass);
+    wheel1.body.setVelocityX(cart_init_force/cart_mass);
+    wheel2.body.setVelocityX(cart_init_force/cart_mass);
 
     sand_drop = this.time.addEvent({
       delay: (1/mu)*30,
@@ -144,6 +153,8 @@ function startGame(){
       is_game_on = false;
       is_game_started = false;
       sandParticles = [];
+      stop_btn.off('click');
+      start_btn.off('click');
       $("#parameters-form > input").val("");
     })
     start_btn.click(() => {
@@ -162,7 +173,7 @@ function startGame(){
         if (Phaser.Geom.Intersects.RectangleToRectangle(particle.getBounds(), cart.getBounds())) {
           particle.destroy(); // Удаляем песчинку
           sandParticles.splice(index, 1); // Удаляем из массива
-          cart_mass += 0.001; // Увеличиваем массу тележки
+          cart_mass += 0.01; // Увеличиваем массу тележки
           updateCartSpeed(); // Обновляем скорость тележки
         }
         if (Phaser.Geom.Intersects.RectangleToRectangle(particle.getBounds(), ground.getBounds())) {
@@ -184,5 +195,7 @@ function startGame(){
   function updateCartSpeed() {
     const adjust_speed = cart_init_force/cart_mass;
     cart.body.setVelocityX(adjust_speed);
+    wheel1.body.setVelocityX(adjust_speed);
+    wheel2.body.setVelocityX(adjust_speed);
   }
 }
