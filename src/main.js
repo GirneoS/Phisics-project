@@ -52,7 +52,9 @@ function startGame(){
     type: Phaser.AUTO,
     width: 1500,
     height: 600,
+    parent: 'game-container',
     scene: {
+        key: 'MainScene',
         preload: preload,
         create: create,
         update: update
@@ -136,12 +138,10 @@ function startGame(){
       is_game_on = false;
     });
     restart_btn.click(() => {
-      cart_mass = 1;
-      sandParticles.forEach((particle) => particle.destroy());
-      sandParticles = [];
-      this.scene.restart();
-      this.scene.pause();
+      game.destroy(true);
+      $("#game-container").html('');
       is_game_on = false;
+      $("#parameters-form > input").val("");
     })
     start_btn.click(() => {
       if(!is_game_on){
