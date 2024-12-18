@@ -162,7 +162,7 @@ function startGame(){
         if (Phaser.Geom.Intersects.RectangleToRectangle(particle.getBounds(), cart.getBounds())) {
           particle.destroy(); // Удаляем песчинку
           sandParticles.splice(index, 1); // Удаляем из массива
-          cart_mass += 0.01; // Увеличиваем массу тележки
+          cart_mass += 0.001; // Увеличиваем массу тележки
           updateCartSpeed(); // Обновляем скорость тележки
         }
         if (Phaser.Geom.Intersects.RectangleToRectangle(particle.getBounds(), ground.getBounds())) {
