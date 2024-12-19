@@ -10,7 +10,7 @@ let stop_btn = $("#stop_btn");
 let start_btn = $("#start_btn");
 let restart_btn = $("#reload_btn");
 let cart_init_force = 50;
-let startY = 530;
+let startY = 230;
 let is_game_started = false;
 let ground;
 let cart_mass = 1;
@@ -51,7 +51,7 @@ function startGame(){
   var config = {
     type: Phaser.AUTO,
     width: 1500,
-    height: 600,
+    height: 300,
     parent: 'game-container',
     scene: {
         key: 'MainScene',
@@ -63,7 +63,7 @@ function startGame(){
       default: 'arcade',
       arcade: {
         gravity: { y: 300 }, // Гравитация вниз
-        debug: true          // Отображение физических границ
+        debug: false          // Отображение физических границ
       }
     },
   };
@@ -78,37 +78,37 @@ function startGame(){
     //пол
     const graphics = this.add.graphics();
     graphics.fillStyle(0x000000, 1); // Зеленый цвет, непрозрачный
-    graphics.fillRect(0, 550, 1500, 50); // x, y, ширина, высота
-    ground = this.add.rectangle(750, 575, 1500, 50); // Центрируем прямоугольник
+    graphics.fillRect(0, 250, 1500, 50); // x, y, ширина, высота
+    ground = this.add.rectangle(750, 275, 1500, 50); // Центрируем прямоугольник
     this.physics.add.existing(ground, true);
     //пол
     //жерново
     //300 -> 290 (3.5% от длины) - длина первого верхнего блока
-    this.add.rectangle(cart_length*0.965/2, 430, cart_length*0.965, 20, 0xA9A9A9)
+    this.add.rectangle(cart_length*0.965/2, 130, cart_length*0.965, 20, 0xA9A9A9)
     graphics.fillStyle(0xA9A9A9, 1); // серый цвет, полностью непрозрачный
 
     // Настраиваем стиль обводки (цвет и толщина линии)
 
     // Начинаем рисовать треугольник
     graphics.beginPath();
-    graphics.moveTo(cart_length*0.965, 415); // Первая вершина (верхняя точка треугольника)
-    graphics.lineTo(cart_length*0.965, 445); // Вторая вершина (левая нижняя точка)
+    graphics.moveTo(cart_length*0.965, 115); // Первая вершина (верхняя точка треугольника)
+    graphics.lineTo(cart_length*0.965, 145); // Вторая вершина (левая нижняя точка)
     //правая нижняя вершина - cart_length+5%
-    graphics.lineTo(cart_length*1.05, 445); // Третья вершина (правая нижняя точка)
+    graphics.lineTo(cart_length*1.05, 145); // Третья вершина (правая нижняя точка)
     graphics.closePath(); // Замыкаем треугольник
 
     // Заливаем треугольник цветом
     graphics.fillPath();
 
     graphics.beginPath();
-    graphics.moveTo(cart_length*1.05 + 2, 445); // Третья вершина (правая нижняя точка)
-    graphics.lineTo(cart_length*1.05 + 2 + cart_length*0.0833, 445); // Вторая вершина (левая нижняя точка)
-    graphics.lineTo(cart_length*1.05 + 2 + cart_length*0.0833, 415); // Третья вершина (правая нижняя точка)
+    graphics.moveTo(cart_length*1.05 + 2, 145); // Третья вершина (правая нижняя точка)
+    graphics.lineTo(cart_length*1.05 + 2 + cart_length*0.0833, 145); // Вторая вершина (левая нижняя точка)
+    graphics.lineTo(cart_length*1.05 + 2 + cart_length*0.0833, 115); // Третья вершина (правая нижняя точка)
     graphics.closePath(); // Замыкаем треугольник
     //длина второго квадрата = 1500 - cart_length*1.05 + 2 + cart_length*0.0833
     //центр второго квадрата = cart_length*1.05 + 2 + cart_length*0.0833 + половина длины
     const second_cube_length = 1500 - cart_length*1.05 + 2 + cart_length*0.0833;
-    this.add.rectangle(cart_length*1.05 + 2 + cart_length*0.0833 + second_cube_length/2,430, second_cube_length,20,0xA9A9A9)
+    this.add.rectangle(cart_length*1.05 + 2 + cart_length*0.0833 + second_cube_length/2,130, second_cube_length,20,0xA9A9A9)
 
     // Заливаем треугольник цветом
     graphics.fillPath();
@@ -116,9 +116,9 @@ function startGame(){
     //жерново
     graphics.fillStyle(0xffff00, 1);
     graphics.beginPath();
-    graphics.moveTo(cart_length*0.96, 415);
-    graphics.lineTo(cart_length*1.06 + 2 + cart_length*0.0833, 415);
-    graphics.lineTo(cart_length*1.055, 446);
+    graphics.moveTo(cart_length*0.96, 115);
+    graphics.lineTo(cart_length*1.06 + 2 + cart_length*0.0833, 115);
+    graphics.lineTo(cart_length*1.055, 146);
     graphics.closePath();
     graphics.fillPath();
 
@@ -195,7 +195,7 @@ function startGame(){
   function createSandParticle(scene) {
     if (sandParticles.length < maxSandParticles) {
       const x = Phaser.Math.Between(cart_length*1.05, cart_length*1.05 + 4); // Случайная координата по x
-      const particle = scene.add.rectangle(x, 430, 3, 3, 0xffff00); // Песчинка
+      const particle = scene.add.rectangle(x, 130, 3, 3, 0xffff00); // Песчинка
       scene.physics.add.existing(particle); // Добавляем физику
       sandParticles.push(particle);
     }

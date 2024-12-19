@@ -48,8 +48,8 @@ function makeNewChart(yName,xName,chartN){
              label: '',
              data: [],
              borderWidth: 0.1,
-             borderColor: '#FF6384',
-             backgroundColor: '#FFB1C1',
+             borderColor: '#FF6384', //FF6384
+             backgroundColor: '#FFB1C1', //FFB1C1
              
            }]
          },
@@ -59,7 +59,12 @@ function makeNewChart(yName,xName,chartN){
                beginAtZero: true,
                title:{
                  text:yName,
-                 display:true
+                 display:true,
+                 color: "white",
+                 size: 14
+               },
+               ticks:{
+                color: '#FFB1C1'
                }
              },
              x:{
@@ -71,7 +76,12 @@ function makeNewChart(yName,xName,chartN){
                beginAtZero:true,
                title:{
                  text:xName,
-                 display:true
+                 display:true,
+                 color: "white",
+                 size: 14
+               },
+               ticks:{
+                color: '#FFB1C1'
                }
              }
            }
