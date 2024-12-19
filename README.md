@@ -1,1 +1,1 @@
-# Phisics-project
+# Physics-project
