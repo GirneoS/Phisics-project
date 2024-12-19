@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="/src/style.css"/>
+    <link rel="stylesheet" href="./src/style.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
   </head>
@@ -22,7 +22,25 @@
       <button id="stop_btn">СТОП</button>
       <button id="reload_btn">СБРОС</button>
     </div>
+    <div class="grphics" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+      <div class = "chart">
+        <canvas id="chartX"></canvas>
+      </div>
+      <div class = "chart">
+        <canvas id="chartA"></canvas>
+      </div>
+    </div>
+    <div class="grphics" style="display:flex; flex-direction: row; justify-content: center; align-items: center"> 
+      <div class = "chart">
+        <canvas id="chartU"></canvas>
+      </div>
+      <div class = "chart">
+        <canvas id="chartM"></canvas>
+      </div>
+    </div>
     <div id="game-container"></div>
-    <script type="module" src="/src/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./src/graphics.js"></script>
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>

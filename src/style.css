@@ -1,8 +1,18 @@
+body{
+    background-color: #433a78;
+}
+label{
+    color:bisque;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
 #parameters-form{
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 20vh;
+}
+button{
+    border-radius: 8px;
 }
 #parameter-handlers{
     display: flex;
@@ -10,9 +20,19 @@
     justify-content: space-around;
     align-items: center;
 }
+#game-container > canvas{
+    border-radius: 10px;
+    border: solid black 5px;
+    margin: 1vh;
+}
 button{
     width: 10vh;
 }
+.chart{
+    width: 500px; 
+    height: 300px;
+}
+
 /* input{
     width: 20vh;
 }

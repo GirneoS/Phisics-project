@@ -5,7 +5,7 @@ import $ from 'jquery'
 let is_game_on = false;
 let cart, wheel1, wheel2;
 let sandParticles = [];
-let maxSandParticles = 1500;
+let maxSandParticles = 1000;
 let stop_btn = $("#stop_btn");
 let start_btn = $("#start_btn");
 let restart_btn = $("#reload_btn");
@@ -17,6 +17,9 @@ let cart_mass = 1;
 let cart_length;
 let mu;
 let sand_drop;
+let time = 0;
+const FPS = 60;
+
 
 
 function fillParameters(){
@@ -68,15 +71,15 @@ function startGame(){
   let game = new Phaser.Game(config);
 
   function preload (){
-    this.cameras.main.setBackgroundColor('#3498db');
+    this.cameras.main.setBackgroundColor('#ffffff');
   }
 
   function create(){
     //пол
     const graphics = this.add.graphics();
-    graphics.fillStyle(0x4CAF50, 1); // Зеленый цвет, непрозрачный
+    graphics.fillStyle(0x000000, 1); // Зеленый цвет, непрозрачный
     graphics.fillRect(0, 550, 1500, 50); // x, y, ширина, высота
-    ground = this.add.rectangle(400, 575, 1500, 50); // Центрируем прямоугольник
+    ground = this.add.rectangle(750, 575, 1500, 50); // Центрируем прямоугольник
     this.physics.add.existing(ground, true);
     //пол
     //жерново
@@ -133,9 +136,9 @@ function startGame(){
     this.physics.add.collider(wheel1, ground);
     this.physics.add.collider(wheel2, ground);
 
-    cart.body.setVelocityX(cart_init_force/cart_mass);
-    wheel1.body.setVelocityX(cart_init_force/cart_mass);
-    wheel2.body.setVelocityX(cart_init_force/cart_mass);
+    cart.body.setVelocityX(cart_init_force/(cart_mass*3));
+    wheel1.body.setVelocityX(cart_init_force/(cart_mass*3));
+    wheel2.body.setVelocityX(cart_init_force/(cart_mass*3));
 
     sand_drop = this.time.addEvent({
       delay: (1/mu)*30,
@@ -148,6 +151,8 @@ function startGame(){
       is_game_on = false;
     });
     restart_btn.click(() => {
+      clear();
+      time = 0;
       game.destroy(true);
       $("#game-container").html('');
       is_game_on = false;
@@ -168,12 +173,16 @@ function startGame(){
   function update(){
     if(!is_game_on)
       this.scene.pause();
-    
+    m(time,cart_mass);
+    let amoment = a(time,cart_init_force,cart_mass); // моментальное ускорение
+    u(time,amoment);
+    x(time,cart.body.position.x);
+    time += Math.pow(FPS,-1);
     sandParticles.forEach((particle, index) => {
         if (Phaser.Geom.Intersects.RectangleToRectangle(particle.getBounds(), cart.getBounds())) {
           particle.destroy(); // Удаляем песчинку
           sandParticles.splice(index, 1); // Удаляем из массива
-          cart_mass += 0.01; // Увеличиваем массу тележки
+          cart_mass += 0.1; // Увеличиваем массу тележки
           updateCartSpeed(); // Обновляем скорость тележки
         }
         if (Phaser.Geom.Intersects.RectangleToRectangle(particle.getBounds(), ground.getBounds())) {
@@ -193,7 +202,7 @@ function startGame(){
   }
 
   function updateCartSpeed() {
-    const adjust_speed = cart_init_force/cart_mass;
+    const adjust_speed = cart_init_force/(cart_mass*3);
     cart.body.setVelocityX(adjust_speed);
     wheel1.body.setVelocityX(adjust_speed);
     wheel2.body.setVelocityX(adjust_speed);
